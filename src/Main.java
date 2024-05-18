@@ -26,7 +26,7 @@ import javafx.stage.Stage;
 
 import java.util.HashMap;
 
-//Giorgi Tontua
+//Giorgi Tontuaa
 public class Main extends Application {
 
     public static void main(String[] args) {
