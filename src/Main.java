@@ -3,6 +3,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.util.ArrayList;
 import java.sql.Date;
+import java.util.List;
 import java.util.Scanner;
 
 
@@ -49,35 +50,43 @@ public class Main extends Application {
 
         VBox centerBox = new VBox(10);
         centerBox.setPadding(new Insets(20));
-        Button viewToDoBeginning = new Button("View to do");
-        /*viewToDoBeggining.setOnAction(e -> {
-            repo.displayToDo(ToDoList, centerBox);
-        }); */
+        Button viewToDo = new Button("View ToDo List");
+        viewToDo.setOnAction(e -> {
+            List <String> toDoItems = repo.displayToDo();
+            centerBox.getChildren().clear();
+            for (String item : toDoItems) {
+                Label itemLabel = new Label(item);
+                centerBox.getChildren().add(itemLabel);
+            }
+        });
 
-        Button addItem = new Button("Add item");
-        addItem.setOnAction(event ->{
+        Button addItem = new Button("Add Item");
+        addItem.setOnAction(event -> {
             centerBox.getChildren().remove(addItem);
-           // centerBox.getChildren().remove(viewToDoBeggining);
-            Button viewToDo = new Button("View to do");
-            /*viewToDo.setOnAction(e -> {
-                repo.displayToDo(toDoList, centerBox);
-
-            }); */
+            centerBox.getChildren().remove(viewToDo);
+            Button viewToDoAgain = new Button("View To-Do List");
+            viewToDoAgain.setOnAction(e -> {
+                List<String> updatedToDoItems = repo.displayToDo();
+                centerBox.getChildren().clear();
+                for (String item : updatedToDoItems) {
+                    Label itemLabel = new Label(item);
+                    centerBox.getChildren().add(itemLabel);
+                }
+            });
             Text toDoLabel = new Text("To Do:");
             TextArea textArea = new TextArea();
-            textArea.setPromptText("Enter text here... ");
-            Button submit=new Button("Submit");
+            textArea.setPromptText("Enter task here...");
+            Button submit = new Button("Submit");
             submit.setOnAction(e -> {
                 String userInputTask = textArea.getText();
-                System.out.println(userInputTask);
                 repo.addItems(userInputTask, false);
                 textArea.clear();
             });
 
-            centerBox.getChildren().addAll(viewToDoBeginning, addItem);
+            centerBox.getChildren().addAll(viewToDo, addItem, toDoLabel, textArea, submit);
         });
 
-        centerBox.getChildren().addAll(viewToDoBeginning, addItem);
+        centerBox.getChildren().addAll(viewToDo, addItem);
         borderPane.setCenter(centerBox);
 
         Scene scene = new Scene(borderPane, 300, 250);
