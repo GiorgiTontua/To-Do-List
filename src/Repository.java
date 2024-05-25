@@ -11,14 +11,13 @@ public class Repository {
     private String userName = "root";
     private String password = "Giorgi_123";
 
-    public void addItems(String taskadd, Boolean isCompleted) {
-        String sql = "INSERT INTO interactions (int_name, is_completed) VALUES (?, ?);";
+    public void addItems(String taskadd) {
+        String sql = "INSERT INTO interactions (int_name) VALUES (?);";
         try (
                 Connection con = DriverManager.getConnection(url, userName, password);
                 PreparedStatement pr = con.prepareStatement(sql);
         ) {
             pr.setString(1, taskadd);
-            pr.setBoolean(2, isCompleted);
             int rowsAffected = pr.executeUpdate();
             if (rowsAffected > 0)
                 System.out.println("Added successfully.");
@@ -38,9 +37,7 @@ public class Repository {
             ResultSet rs = pr.executeQuery();
             while (rs.next()) {
                 String taskContent = rs.getString("int_name");
-                boolean is_completed = rs.getBoolean("is_completed");
-                String status = (is_completed) ? "[x]" : "[ ]";
-                toDoItems.add(taskContent + " " + status);
+                toDoItems.add(taskContent);
             }
             rs.close();
             pr.close();
@@ -49,5 +46,24 @@ public class Repository {
             throw new RuntimeException(e);
         }
         return toDoItems;
+    }
+
+    public void deleteItem(String itemToDelete){
+        try{
+            Connection con = DriverManager.getConnection(url, userName, password);
+            String sql = "DELETE FROM interactions WHERE int_name = ?";
+            PreparedStatement pr=con.prepareStatement(sql);
+            pr.setString(1, itemToDelete);
+            int rowsAffected = pr.executeUpdate();
+            pr.close();
+            con.close();
+            if (rowsAffected > 0) {
+                System.out.println("ToDo was deleted successfully.");
+            } else {
+                System.out.println("ToDo with the specified name was not found. No deletion occurred.");
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

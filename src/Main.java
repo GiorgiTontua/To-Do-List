@@ -1,11 +1,8 @@
 import java.sql.*;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
-import java.util.ArrayList;
+import java.util.*;
 import java.sql.Date;
-import java.util.List;
-import java.util.Scanner;
-
 
 
 import com.sun.webkit.dom.XPathResultImpl;
@@ -24,8 +21,6 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.scene.control.TextArea;
 import javafx.stage.Stage;
-
-import java.util.HashMap;
 
 //Giorgi Tontuaa
 public class Main extends Application {
@@ -58,12 +53,13 @@ public class Main extends Application {
                 Label itemLabel = new Label(item);
                 centerBox.getChildren().add(itemLabel);
             }
-        });
+            });
 
         Button addItem = new Button("Add Item");
         addItem.setOnAction(event -> {
             centerBox.getChildren().remove(addItem);
             centerBox.getChildren().remove(viewToDo);
+
             Button viewToDoAgain = new Button("View To-Do List");
             viewToDoAgain.setOnAction(e -> {
                 List<String> updatedToDoItems = repo.displayToDo();
@@ -73,23 +69,55 @@ public class Main extends Application {
                     centerBox.getChildren().add(itemLabel);
                 }
             });
+
             Text toDoLabel = new Text("To Do:");
             TextArea textArea = new TextArea();
             textArea.setPromptText("Enter task here...");
             Button submit = new Button("Submit");
             submit.setOnAction(e -> {
                 String userInputTask = textArea.getText();
-                repo.addItems(userInputTask, false);
+                repo.addItems(userInputTask);
                 textArea.clear();
+                centerBox.getChildren().removeAll(toDoLabel, textArea, submit);
             });
+
 
             centerBox.getChildren().addAll(viewToDo, addItem, toDoLabel, textArea, submit);
         });
+        Button deleteItem = new Button("Delete Item");
+        deleteItem.setOnAction(e -> {
+            centerBox.getChildren().remove(deleteItem);
 
-        centerBox.getChildren().addAll(viewToDo, addItem);
+            TextField deleteTextField = new TextField();
+            deleteTextField.setPromptText("Enter task to delete");
+
+            Button confirmDelete = new Button("Delete");
+            confirmDelete.setOnAction(event -> {
+                String taskToDelete = deleteTextField.getText().trim();
+                if (!taskToDelete.isEmpty()) {
+                    repo.deleteItem(taskToDelete);
+                    List<String> updatedToDoItems = repo.displayToDo();
+                    centerBox.getChildren().clear();
+                    for (String item : updatedToDoItems) {
+                        Label itemLabel = new Label(item);
+                        centerBox.getChildren().add(itemLabel);
+                    }
+                }
+            });
+
+            List<String> updatedToDoItems = repo.displayToDo();
+            for (String item : updatedToDoItems) {
+                Label itemLabel = new Label(item);
+                centerBox.getChildren().add(itemLabel);
+            }
+
+            centerBox.getChildren().addAll(deleteTextField, confirmDelete);
+        });
+
+        centerBox.getChildren().addAll(viewToDo, addItem, deleteItem);
         borderPane.setCenter(centerBox);
 
-        Scene scene = new Scene(borderPane, 300, 250);
+        Scene scene = new Scene(borderPane, 600, 600);
         primaryStage.setScene(scene);
         primaryStage.show();
 
