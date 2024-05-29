@@ -4,12 +4,12 @@ import java.sql.PreparedStatement;
 import java.util.*;
 import java.sql.Date;
 
-
 import com.sun.webkit.dom.XPathResultImpl;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -47,13 +47,17 @@ public class Main extends Application {
         centerBox.setPadding(new Insets(20));
         Button viewToDo = new Button("View ToDo List");
         viewToDo.setOnAction(e -> {
+            Label display=new Label("To-Do list has been displayed.");
+            Label relaunchMessage = new Label("Please re-launch the To-Do list.");
             List <String> toDoItems = repo.displayToDo();
             centerBox.getChildren().clear();
             for (String item : toDoItems) {
                 Label itemLabel = new Label(item);
                 centerBox.getChildren().add(itemLabel);
             }
+            centerBox.getChildren().addAll(display, relaunchMessage);
             });
+        viewToDo.setStyle("-fx-min-width: 100px; -fx-min-height: 40px;");
 
         Button addItem = new Button("Add Item");
         addItem.setOnAction(event -> {
@@ -71,19 +75,21 @@ public class Main extends Application {
             });
 
             Text toDoLabel = new Text("To Do:");
-            TextArea textArea = new TextArea();
-            textArea.setPromptText("Enter task here...");
+            TextField textField = new TextField();
+            textField.setPromptText("Enter task here...");
             Button submit = new Button("Submit");
             submit.setOnAction(e -> {
-                String userInputTask = textArea.getText();
+                String userInputTask = textField.getText();
                 repo.addItems(userInputTask);
-                textArea.clear();
-                centerBox.getChildren().removeAll(toDoLabel, textArea, submit);
+                textField.clear();
+                centerBox.getChildren().removeAll(toDoLabel, textField, submit);
             });
+            submit.setStyle("-fx-min-width: 100px; -fx-min-height: 40px;");
 
 
-            centerBox.getChildren().addAll(viewToDo, addItem, toDoLabel, textArea, submit);
+            centerBox.getChildren().addAll(viewToDo, addItem, toDoLabel, textField, submit);
         });
+        addItem.setStyle("-fx-min-width: 100px; -fx-min-height: 40px;");
         Button deleteItem = new Button("Delete Item");
         deleteItem.setOnAction(e -> {
             centerBox.getChildren().remove(deleteItem);
@@ -94,16 +100,19 @@ public class Main extends Application {
             Button confirmDelete = new Button("Delete");
             confirmDelete.setOnAction(event -> {
                 String taskToDelete = deleteTextField.getText().trim();
+                Label textDelete = new Label("To-Do has been deleted.");
+                Label relaunchMessage = new Label("Please re-launch the To-Do list.");
                 if (!taskToDelete.isEmpty()) {
                     repo.deleteItem(taskToDelete);
                     List<String> updatedToDoItems = repo.displayToDo();
                     centerBox.getChildren().clear();
                     for (String item : updatedToDoItems) {
                         Label itemLabel = new Label(item);
-                        centerBox.getChildren().add(itemLabel);
                     }
                 }
+                centerBox.getChildren().addAll(textDelete,relaunchMessage);
             });
+            confirmDelete.setStyle("-fx-min-width: 100px; -fx-min-height: 40px;");
 
             List<String> updatedToDoItems = repo.displayToDo();
             for (String item : updatedToDoItems) {
@@ -113,18 +122,26 @@ public class Main extends Application {
 
             centerBox.getChildren().addAll(deleteTextField, confirmDelete);
         });
+        deleteItem.setStyle("-fx-min-width: 100px; -fx-min-height: 40px;");
 
-        centerBox.getChildren().addAll(viewToDo, addItem, deleteItem);
+        Button clearToDo=new Button("Clear To-Do");
+        clearToDo.setOnAction(e -> {
+            repo.clearToDo();
+            Label clearMessage = new Label("To-Do list has been cleared.");
+            centerBox.getChildren().addAll(clearMessage);
+        });
+        clearToDo.setStyle("-fx-min-width: 100px; -fx-min-height: 40px;");
+
+        centerBox.getChildren().addAll(viewToDo, addItem, deleteItem, clearToDo);
         borderPane.setCenter(centerBox);
+        centerBox.setAlignment(Pos.CENTER);
+        centerBox.setSpacing(10);
+        topBox.setAlignment(Pos.CENTER);
 
         Scene scene = new Scene(borderPane, 600, 600);
         primaryStage.setScene(scene);
         primaryStage.show();
-
-
-
-
-
+        primaryStage.setTitle("To-Do List");
 
     }
 }

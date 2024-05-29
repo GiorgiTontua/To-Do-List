@@ -1,3 +1,5 @@
+import com.mysql.cj.x.protobuf.MysqlxPrepare;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -66,4 +68,18 @@ public class Repository {
             throw new RuntimeException(e);
         }
     }
+
+    public void clearToDo(){
+        try{
+            Connection con = DriverManager.getConnection(url, userName, password);
+            String sql = "TRUNCATE interactions";
+            PreparedStatement pr=con.prepareStatement(sql);
+            int rowsAffected = pr.executeUpdate();
+            pr.close();
+            con.close();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
 }
+
