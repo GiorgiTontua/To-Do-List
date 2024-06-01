@@ -47,15 +47,13 @@ public class Main extends Application {
         centerBox.setPadding(new Insets(20));
         Button viewToDo = new Button("View ToDo List");
         viewToDo.setOnAction(e -> {
-            Label display=new Label("To-Do list has been displayed.");
-            Label relaunchMessage = new Label("Please re-launch the To-Do list.");
+            Label display=new Label("(To-Do list has been displayed.)");
             List <String> toDoItems = repo.displayToDo();
-            centerBox.getChildren().clear();
             for (String item : toDoItems) {
                 Label itemLabel = new Label(item);
                 centerBox.getChildren().add(itemLabel);
             }
-            centerBox.getChildren().addAll(display, relaunchMessage);
+            centerBox.getChildren().addAll(display);
             });
         viewToDo.setStyle("-fx-min-width: 100px; -fx-min-height: 40px;");
 
@@ -101,16 +99,14 @@ public class Main extends Application {
             confirmDelete.setOnAction(event -> {
                 String taskToDelete = deleteTextField.getText().trim();
                 Label textDelete = new Label("To-Do has been deleted.");
-                Label relaunchMessage = new Label("Please re-launch the To-Do list.");
                 if (!taskToDelete.isEmpty()) {
                     repo.deleteItem(taskToDelete);
                     List<String> updatedToDoItems = repo.displayToDo();
-                    centerBox.getChildren().clear();
                     for (String item : updatedToDoItems) {
                         Label itemLabel = new Label(item);
                     }
                 }
-                centerBox.getChildren().addAll(textDelete,relaunchMessage);
+                centerBox.getChildren().addAll(textDelete);
             });
             confirmDelete.setStyle("-fx-min-width: 100px; -fx-min-height: 40px;");
 
