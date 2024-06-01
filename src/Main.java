@@ -11,15 +11,11 @@ import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
-import javafx.scene.control.TextArea;
 import javafx.stage.Stage;
 
 //Giorgi Tontua
@@ -51,7 +47,16 @@ public class Main extends Application {
             List <String> toDoItems = repo.displayToDo();
             for (String item : toDoItems) {
                 Label itemLabel = new Label(item);
-                centerBox.getChildren().add(itemLabel);
+
+                CheckBox completionCheckBox = new CheckBox();
+                completionCheckBox.setOnAction(event -> {
+                    boolean completed = completionCheckBox.isSelected();
+                    repo.updateTaskCompletion(item, completed);
+                });
+
+                HBox taskBox = new HBox(10);
+                taskBox.getChildren().addAll(itemLabel, completionCheckBox);
+                centerBox.getChildren().add(taskBox);
             }
             centerBox.getChildren().addAll(display);
             });

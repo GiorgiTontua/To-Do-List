@@ -81,6 +81,19 @@ public class Repository {
         }
     }
 
-
+    public void updateTaskCompletion(String taskContent, boolean completed) {
+        try {
+            Connection con = DriverManager.getConnection(url, userName, password);
+            String sql = "UPDATE INTERACTIONS SET completed = ? WHERE int_name = ?";
+            PreparedStatement pr = con.prepareStatement(sql);
+            pr.setBoolean(1, completed);
+            pr.setString(2, taskContent);
+            pr.executeUpdate();
+            pr.close();
+            con.close();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }
 
