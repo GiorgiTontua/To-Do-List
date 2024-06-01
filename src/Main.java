@@ -62,16 +62,6 @@ public class Main extends Application {
             centerBox.getChildren().remove(addItem);
             centerBox.getChildren().remove(viewToDo);
 
-            Button viewToDoAgain = new Button("View To-Do List");
-            viewToDoAgain.setOnAction(e -> {
-                List<String> updatedToDoItems = repo.displayToDo();
-                centerBox.getChildren().clear();
-                for (String item : updatedToDoItems) {
-                    Label itemLabel = new Label(item);
-                    centerBox.getChildren().add(itemLabel);
-                }
-            });
-
             Text toDoLabel = new Text("To Do:");
             TextField textField = new TextField();
             textField.setPromptText("Enter task here...");
