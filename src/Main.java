@@ -22,7 +22,7 @@ import javafx.scene.text.Text;
 import javafx.scene.control.TextArea;
 import javafx.stage.Stage;
 
-//Giorgi Tontuaa
+//Giorgi Tontua
 public class Main extends Application {
 
     public static void main(String[] args) {

@@ -74,7 +74,6 @@ public class Repository {
             Connection con = DriverManager.getConnection(url, userName, password);
             String sql = "TRUNCATE interactions";
             PreparedStatement pr=con.prepareStatement(sql);
-            int rowsAffected = pr.executeUpdate();
             pr.close();
             con.close();
         } catch (Exception e) {
