@@ -9,9 +9,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Repository {
-    private String url = "jdbc:mysql://localhost:3306/mziuri";
-    private String userName = "root";
-    private String password = "Giorgi_123";
+    private static final String url = "jdbc:mysql://localhost:3306/mziuri";
+    private static final String userName = "root";
+    private static final String password = "Giorgi_123";
 
     public void addItems(String taskadd) {
         String sql = "INSERT INTO interactions (int_name) VALUES (?);";
