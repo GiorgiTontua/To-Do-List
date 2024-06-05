@@ -43,23 +43,29 @@ public class Main extends Application {
         centerBox.setPadding(new Insets(20));
         Button viewToDo = new Button("View ToDo List");
         viewToDo.setOnAction(e -> {
-            Label display=new Label("(To-Do list has been displayed.)");
-            List <String> toDoItems = repo.displayToDo();
+            Label display = new Label("(To-Do list has been displayed.)");
+            List<String> toDoItems = repo.displayToDo();
             for (String item : toDoItems) {
                 Label itemLabel = new Label(item);
-                
+
                 CheckBox completionCheckBox = new CheckBox();
+
                 completionCheckBox.setOnAction(event -> {
                     boolean completed = completionCheckBox.isSelected();
                     repo.updateTaskCompletion(item, completed);
+                    if (completed) {
+                        completionCheckBox.setDisable(true);
+                    }
                 });
 
                 HBox taskBox = new HBox(10);
                 taskBox.getChildren().addAll(itemLabel, completionCheckBox);
                 centerBox.getChildren().add(taskBox);
             }
-            centerBox.getChildren().addAll(display);
-            });
+            centerBox.getChildren().add(display);
+        });
+
+
         viewToDo.setStyle("-fx-min-width: 100px; -fx-min-height: 40px;");
 
         Button addItem = new Button("Add Item");
