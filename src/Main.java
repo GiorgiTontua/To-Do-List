@@ -47,7 +47,7 @@ public class Main extends Application {
             List <String> toDoItems = repo.displayToDo();
             for (String item : toDoItems) {
                 Label itemLabel = new Label(item);
-
+                
                 CheckBox completionCheckBox = new CheckBox();
                 completionCheckBox.setOnAction(event -> {
                     boolean completed = completionCheckBox.isSelected();
