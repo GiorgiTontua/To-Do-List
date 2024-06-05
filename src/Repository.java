@@ -38,8 +38,16 @@ public class Repository {
             PreparedStatement pr = con.prepareStatement(sql);
             ResultSet rs = pr.executeQuery();
             while (rs.next()) {
-                String taskContent = rs.getString("int_name");
-                toDoItems.add(taskContent);
+                boolean isCompleted = rs.getBoolean("completed");
+                if (isCompleted) {
+                    String taskContent = rs.getString("int_name");
+                    toDoItems.add(taskContent + "[Is Completed]");
+                }
+                else{
+                    String taskContent = rs.getString("int_name");
+                    toDoItems.add(taskContent);
+                }
+
             }
             rs.close();
             pr.close();
